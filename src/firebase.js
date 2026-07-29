@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { 
   getAuth, 
-  signInWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
   signOut, 
   onAuthStateChanged 
 } from "firebase/auth";
@@ -33,9 +34,16 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
+const googleProvider = new GoogleAuthProvider();
+
 // --- Auth Functions ---
+export const googleLogin = () => {
+  return signInWithPopup(auth, googleProvider);
+};
+
+// Kept for backward compatibility if App.jsx still references adminLogin
 export const adminLogin = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password);
+  return googleLogin();
 };
 
 export const adminLogout = () => {
