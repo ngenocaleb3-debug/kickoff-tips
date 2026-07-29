@@ -1,77 +1,21 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  query,
-  orderBy,
-} from "firebase/firestore";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Fill these in from Firebase Console → Project Settings → General → Your apps
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyDqLcYw50m52gK6PFZ1LVIy7VuNUUKmFT8",
+  authDomain: "kickoff-tips.firebaseapp.com",
+  projectId: "kickoff-tips",
+  storageBucket: "kickoff-tips.firebasestorage.app",
+  messagingSenderId: "263942240393",
+  appId: "1:263942240393:web:6553fa35da24d53af4ee58",
+  measurementId: "G-CTJBK8LD5Y"
 };
 
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-
-// ---------------------------------------------------------------------------
-// Tips feed
-// ---------------------------------------------------------------------------
-
-// Live-updates callback whenever any tip is added, edited, or deleted.
-// Returns an unsubscribe function — call it on unmount.
-export function subscribeTips(callback) {
-  const q = query(collection(db, "tips"), orderBy("createdAt", "desc"));
-  return onSnapshot(
-    q,
-    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
-    (err) => console.error("subscribeTips error:", err)
-  );
-}
-
-export function publishTip(tip) {
-  return addDoc(collection(db, "tips"), { ...tip, createdAt: Date.now() });
-}
-
-export function settleTip(id, result) {
-  return updateDoc(doc(db, "tips", id), { result });
-}
-
-export function deleteTip(id) {
-  return deleteDoc(doc(db, "tips", id));
-}
-
-// ---------------------------------------------------------------------------
-// Admin auth — replaces the hardcoded PIN entirely
-// ---------------------------------------------------------------------------
-
-export function adminLogin(email, password) {
-  return signInWithEmailAndPassword(auth, email, password);
-}
-
-export function adminLogout() {
-  return signOut(auth);
-}
-
-// Fires immediately with the current user (or null), then on every change.
-// Returns an unsubscribe function.
-export function watchAdminAuth(callback) {
-  return onAuthStateChanged(auth, callback);
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
