@@ -197,16 +197,18 @@ function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
   const [form, setForm] = useState(blank);
 
     async function handleLogin() {
+      async function handleLogin() {
     setLoginError("");
     setLoggingIn(true);
     try {
-      await adminLogin();
+      await adminLogin(email, password);
     } catch (e) {
-      setLoginError("Google sign-in failed. Please try again.");
+      setLoginError("Login failed. Check your email and password.");
     } finally {
       setLoggingIn(false);
     }
   }
+
 
 
   function update(field, value) {
@@ -223,26 +225,39 @@ function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
     setForm(blank);
   }
 
-    if (!adminUser) {
+      if (!adminUser) {
     return (
       <div className="mx-5 mb-3 flex flex-col gap-3 p-4 bg-slate-900 rounded-xl border border-slate-800">
         <div className="flex items-center gap-2">
           <Lock size={14} style={{ color: "GOLD" }} />
           <span className="text-xs font-semibold text-slate-200">Admin Login</span>
         </div>
-        
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="rounded-lg px-3 py-2 bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="rounded-lg px-3 py-2 bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+        />
         {loginError && <span className="text-xs text-rose-400">{loginError}</span>}
-        
-        <button 
-          onClick={handleLogin} 
+        <button
+          onClick={handleLogin}
           disabled={loggingIn}
           className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold rounded-lg text-sm transition-colors"
         >
-          {loggingIn ? "Signing in..." : "Sign in with Google"}
+          {loggingIn ? "Signing in..." : "Sign in"}
         </button>
       </div>
     );
   }
+
 
   return (
     <div className="mx-5 mb-3 flex flex-col gap-3 rounded-2xl p-4" style={{ backgroundColor: COLORS.card, border: `1px solid ${COLORS.cardLine}` }}>
