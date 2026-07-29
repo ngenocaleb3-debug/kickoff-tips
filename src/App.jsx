@@ -102,7 +102,7 @@ function TipCard({ tip, isNew }) {
               <span className="truncate rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest" style={{ backgroundColor: COLORS.floodlightDim + "40", color: COLORS.floodlight, maxWidth: 150 }}>
                 {tip.league}
               </span>
-              <span className="shrink-0 text-[10px] font-medium" style={{ color: COLORS.chalkDim }}>{formatKickoff(tip.kickoff)}</span>
+              <span classame="shrink-0 text-[10px] font-medium" style={{ color: COLORS.chalkDim }}>{formatKickoff(tip.kickoff)}</span>
             </div>
             <div className="flex items-center justify-between gap-2">
               <div className="flex flex-1 items-center gap-2">
@@ -365,4 +365,64 @@ export default function App() {
           <Trophy size={26} style={{ color: COLORS.floodlight }} />
           {unseenCount > 0 && (
             <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold" style={{ backgroundColor: COLORS.loss, color: COLORS.chalk }}>
-     
+              {unseenCount}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {toast && (
+        <div className="mx-5 mb-2 flex items-center gap-2 rounded-xl px-3 py-2" style={{ backgroundColor: COLORS.floodlight }}>
+          <Bell size={13} style={{ color: COLORS.pitchDark }} />
+          <span className="text-[11px] font-semibold" style={{ color: COLORS.pitchDark }}>{toast}</span>
+        </div>
+      )}
+
+      {tab === "feed" ? (
+        <div className="flex-1 overflow-y-auto px-5" onClick={markSeen}>
+          {tips.length === 0 ? (
+            <div className="flex flex-col items-center gap-2 py-16 text-center">
+              <span className="text-xs" style={{ color: COLORS.chalkDim }}>No tips published yet. Check back soon.</span>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 pb-2 pt-1">
+              {tips.map((t) => <TipCard key={t.id} tip={t} isNew={t.createdAt > lastSeen} />)}
+            </div>
+          )}
+          {tips.length > 0 && <AdSlot />}
+        </div>
+      ) : tab === "record" ? (
+        <div className="flex-1 overflow-y-auto pt-2"><TrackRecord tips={tips} /></div>
+      ) : (
+        <div className="flex-1 overflow-y-auto pt-2">
+          <AdminPanel
+            tips={tips}
+            adminUser={adminUser}
+            onPublish={publishTip}
+            onDelete={deleteTip}
+            onSettle={settleTip}
+          />
+        </div>
+      )}
+
+      <div className="flex shrink-0 justify-around border-t px-5 py-3" style={{ borderColor: COLORS.cardLine, backgroundColor: COLORS.pitchDark }}>
+        <button onClick={() => setTab("feed")} className="flex flex-col items-center gap-1">
+          <Home size={20} style={{ color: tab === "feed" ? COLORS.floodlight : COLORS.chalkDim }} />
+          <span className="text-[10px]" style={{ color: tab === "feed" ? COLORS.floodlight : COLORS.chalkDim }}>Tips</span>
+        </button>
+        <button onClick={() => setTab("record")} className="flex flex-col items-center gap-1">
+          <BarChart3 size={20} style={{ color: tab === "record" ? COLORS.floodlight : COLORS.chalkDim }} />
+          <span className="text-[10px]" style={{ color: tab === "record" ? COLORS.floodlight : COLORS.chalkDim }}>Track Record</span>
+        </button>
+        <button onClick={() => setTab("admin")} className="flex flex-col items-center gap-1">
+          <Plus size={20} style={{ color: tab === "admin" ? COLORS.floodlight : COLORS.chalkDim }} />
+          <span className="text-[10px]" style={{ color: tab === "admin" ? COLORS.floodlight : COLORS.chalkDim }}>Publish</span>
+        </button>
+      </div>
+
+      <p className="shrink-0 px-5 pb-4 text-center text-[9px] leading-snug" style={{ color: COLORS.chalkDim, backgroundColor: COLORS.pitchDark }}>
+        For informational and entertainment purposes only. Does not facilitate betting or gambling.
+      </p>
+    </div>
+  );
+      }
