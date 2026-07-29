@@ -1,23 +1,22 @@
 import { initializeApp } from "firebase/app";
-import { 
-  getAuth, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  onAuthStateChanged 
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from "firebase/auth";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  deleteDoc, 
-  doc, 
-  updateDoc, 
-  onSnapshot, 
-  query, 
-  orderBy 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  query,
+  orderBy
 } from "firebase/firestore";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDqLcYw50m52gK6PFZ1LVIy7VuNUUKmFT8",
   authDomain: "kickoff-tips.firebaseapp.com",
@@ -49,7 +48,7 @@ export const watchAdminAuth = (callback) => {
 export const publishTip = (tipData) => {
   return addDoc(collection(db, "tips"), {
     ...tipData,
-    createdAt: new Date().toISOString()
+    createdAt: Date.now()
   });
 };
 
@@ -57,8 +56,12 @@ export const deleteTip = (tipId) => {
   return deleteDoc(doc(db, "tips", tipId));
 };
 
-export const settleTip = (tipId, status) => {
-  return updateDoc(doc(db, "tips", tipId), { status });
+export const settleTip = (tipId, result) => {
+  return updateDoc(doc(db, "tips", tipId), { result });
+};
+
+export const updateFinalScore = (tipId, ftScore) => {
+  return updateDoc(doc(db, "tips", tipId), { ftScore, played: true });
 };
 
 export const subscribeTips = (callback) => {
