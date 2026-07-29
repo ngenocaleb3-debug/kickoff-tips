@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "263942240393",
+    "project_id": "kickoff-tips",
+    "storage_bucket": "kickoff-tips.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263942240393:android:978b3f404bda0afbf4ee58",
+        "android_client_info": {
+          "package_name": "com.ngenocaleb3.kickofftips"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRetyHbfr02kvk5gUXvLBIO-0cp5HWkjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
