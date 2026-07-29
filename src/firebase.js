@@ -68,17 +68,10 @@ export const subscribeTips = (callback) => {
     callback(tips);
   });
 };
-const googleProvider = new GoogleAuthProvider();
-
-// --- Auth Functions ---
-export const googleLogin = () => {
-  return signInWithPopup(auth, googleProvider);
-};
-
-// Kept for backward compatibility if App.jsx still references adminLogin
 export const adminLogin = (email, password) => {
-  return googleLogin();
+  return signInWithEmailAndPassword(auth, email, password);
 };
+
 
 export const adminLogout = () => {
   return signOut(auth);
