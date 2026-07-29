@@ -437,11 +437,12 @@ function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
         <input type="number" min="1" max="99" value={form.confidence} onChange={(e) => update("confidence", e.target.value)} className="w-20 rounded-lg px-3 py-2 text-xs outline-none" style={inputStyle} />
       </div>
 
-      <textarea placeholder="Note / reasoning" value={form.note} onChange={(e) => update("note", e.target.value)} rows={2} className="rounded-lg px-3 py-2 text-xs outline-none" style={inputStyle} />
+            <textarea placeholder="Note / reasoning" value={form.note} onChange={(e) => update("note", e.target.value)} rows={2} className="rounded-lg px-3 py-2 text-xs outline-none" style={inputStyle} />
+      <button onClick={submit} className="flex items-center justify-center gap-1.5 bg-blue-600 text-white p-2.5 rounded-lg text-xs font-semibold">
+        <Send size={13} /> Publish tip
+      </button>
 
-              <button onClick={submit} className="flex items-c...">
-          <Send size={13} /> Publish tip
-              {tips.length > 0 && (
+      {tips.length > 0 && (
         <div className="mt-2 flex flex-col gap-2">
           <span className="text-[10px] uppercase font-semibold text-slate-400">
             Manage Tips
@@ -472,11 +473,12 @@ function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
               </div>
             </div>
           ))}
-              </div>
-    )}
-  </div>
+        </div>
+      )}
+    </div>
   );
 }
+
 
 
 // -----------------------------------------------------------------------------
