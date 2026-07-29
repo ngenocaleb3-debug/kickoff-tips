@@ -146,55 +146,204 @@ function TrackRecord({ tips }) {
   return (
     <div className="flex flex-col gap-4 px-5 pb-6">
       <div className="flex items-center justify-between rounded-2xl p-5" style={{ backgroundColor: COLORS.card, border: `1px solid ${COLORS.cardLine}` }}>
-        <div>
-          <p className="text-[11px] uppercase tracking-widest" style={{ color: COLORS.chalkDim }}>Season accuracy</p>
-          <p className="text-3xl font-bold" style={{ color: COLORS.floodlight, fontFamily: "'Space Grotesk', sans-serif" }}>{accuracy}%</p>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <TrendingUp size={22} style={{ color: COLORS.win }} />
-          <span className="text-[11px]" style={{ color: COLORS.chalkDim }}>{hits}/{settled.length} tips landed</span>
-        </div>
-      </div>
-      {settled.length === 0 ? (
-        <span className="py-8 text-center text-xs" style={{ color: COLORS.chalkDim }}>No settled tips yet — mark results in the Publish tab once matches finish.</span>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {settled.map((r) => (
-            <div key={r.id} className="flex items-center justify-between rounded-xl px-4 py-3" style={{ backgroundColor: COLORS.pitchMid, border: `1px solid ${COLORS.cardLine}` }}>
-              <div>
-                <p className="text-xs font-semibold" style={{ color: COLORS.chalk }}>{r.home} vs {r.away}</p>
-                <p className="text-[10px]" style={{ color: COLORS.chalkDim }}>Tip: {r.pick}</p>
-              </div>
-              <span className="flex h-7 w-7 items-center justify-center rounded-full" style={{ backgroundColor: r.result === "correct" ? COLORS.win + "26" : COLORS.loss + "26", color: r.result === "correct" ? COLORS.win : COLORS.loss }}>
-                {r.result === "correct" ? <Check size={15} /> : <XIcon size={15} />}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AdSlot() {
-  return (
-    <div className="mx-5 my-3 flex items-center justify-center rounded-xl py-3 text-[11px]" style={{ backgroundColor: COLORS.pitchMid, border: `1px dashed ${COLORS.cardLine}`, color: COLORS.chalkDim }}>
-      AdMob banner slot
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Admin panel — real Firebase Auth login, publish / settle / delete tips
-// ---------------------------------------------------------------------------
-function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
+function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
-  const blank = { league: "", home: "", away: "", kickoff: "", market: "1X2", pick: "Home Win", ftScore: "", confidence: 65, note: "" };
+  const blank = {
+    league: "",
+    home: "",
+    away: "",
+    prediction: "",
+    odds: "",
+    category: "Free",
+  };
   const [form, setForm] = useState(blank);
+
+  async function handleLogin() {
+    setLoginError("");
+    setLoggingIn(true);
+    try {
+      await adminLogin(email, password);
+    } catch (e) {
+      setLoginError(e.code || "Login failed. Check email and password.");
+    } finally {
+      setLoggingIn(false);
+    }
+  }
+
+  function update(field, value) {
+    setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  function submit() {
+    if (!form.home || !form.away || !form.prediction || !form.odds) return;
+    onPublish({
+      ...form,
+      match: `${form.home} vs ${form.away}`,
+      status: "pending",
+    });
+    setForm(blank);
+  }
+
+  if (!adminUser) {
+    return (
+      <div className="mx-5 mb-3 flex flex-col gap-3 p-4 bg-slate-900 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-2">
+          <Lock size={14} style={{ color: "GOLD" }} />
+          <span className="text-xs font-semibold text-slate-200">
+            Admin Login
+          </span>
+        </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="rounded-lg px-3 py-2 bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="rounded-lg px-3 py-2 bg-slate-950 border border-slate-800 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+        />
+        {loginError && (
+          <span className="text-xs text-rose-400">{loginError}</span>
+        )}
+        <button
+          onClick={handleLogin}
+          disabled={loggingIn}
+          className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold rounded-lg text-sm transition-colors"
+        >
+          {loggingIn ? "Signing in..." : "Sign in"}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-5 mb-3 flex flex-col gap-3">
+      <div className="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800">
+        <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Admin Active
+        </span>
+        <button
+          onClick={adminLogout}
+          className="text-xs text-slate-400 hover:text-white flex items-center gap-1"
+        >
+          <LogOut size={14} /> Logout
+        </button>
+      </div>
+
+      <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+        <h3 className="font-bold text-white text-sm flex items-center gap-2">
+          <Plus size={16} className="text-emerald-400" /> Post New Tip
+        </h3>
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="text"
+            placeholder="Home Team"
+            value={form.home}
+            onChange={(e) => update("home", e.target.value)}
+            className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+          />
+          <input
+            type="text"
+            placeholder="Away Team"
+            value={form.away}
+            onChange={(e) => update("away", e.target.value)}
+            className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+          />
+        </div>
+        <input
+          type="text"
+          placeholder="League (e.g. Premier League)"
+          value={form.league}
+          onChange={(e) => update("league", e.target.value)}
+          className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+        />
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="text"
+            placeholder="Prediction (e.g. Home Win)"
+            value={form.prediction}
+            onChange={(e) => update("prediction", e.target.value)}
+            className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+          />
+          <input
+            type="text"
+            placeholder="Odds (e.g. 1.85)"
+            value={form.odds}
+            onChange={(e) => update("odds", e.target.value)}
+            className="bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+          />
+        </div>
+        <select
+          value={form.category}
+          onChange={(e) => update("category", e.target.value)}
+          className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+        >
+          <option value="Free">Free Tip</option>
+          <option value="VIP">VIP Tip</option>
+        </select>
+        <button
+          onClick={submit}
+          className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-sm flex items-center justify-center gap-1"
+        >
+          <Send size={16} /> Publish Tip
+        </button>
+      </div>
+
+      <div className="mt-4 space-y-2">
+        <h4 className="text-xs font-semibold text-slate-400 uppercase">
+          Manage Tips
+        </h4>
+        {tips.map((tip) => (
+          <div
+            key={tip.id}
+            className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex justify-between items-center"
+          >
+            <div>
+              <p className="font-semibold text-xs text-white">{tip.match}</p>
+              <p className="text-[10px] text-slate-400">
+                {tip.prediction} @ {tip.odds} ({tip.status})
+              </p>
+            </div>
+            <div className="flex gap-1">
+              {tip.status === "pending" && (
+                <>
+                  <button
+                    onClick={() => onSettle(tip.id, "won")}
+                    className="p-1 bg-emerald-600/20 text-emerald-400 rounded text-xs"
+                  >
+                    <Check size={14} />
+                  </button>
+                  <button
+                    onClick={() => onSettle(tip.id, "lost")}
+                    className="p-1 bg-rose-600/20 text-rose-400 rounded text-xs"
+                  >
+                    <XIcon size={14} />
+                  </button>
+                </>
+              )}
+              <button
+                onClick={() => onDelete(tip.id)}
+                className="p-1 bg-slate-800 text-slate-400 hover:text-rose-400 rounded text-xs"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
       async function handleLogin() {
     setLoginError("");
