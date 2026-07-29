@@ -472,21 +472,19 @@ function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
               </div>
             </div>
           ))}
-        </div>
-      )}
-    </div>
+              </div>
+    )}
+  </div>
   );
 }
 
-      )}
-    </div>
-  );
-}
 
 // -----------------------------------------------------------------------------
 // App shell
 // -----------------------------------------------------------------------------
 export default function App() {
+
+
 
   const [tab, setTab] = useState("feed");
   const [tips, setTips] = useState([]);
