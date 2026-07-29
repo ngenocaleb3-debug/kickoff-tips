@@ -10,7 +10,6 @@ import {
   adminLogout,
   watchAdminAuth,
 } from "./firebase";
-import { initAdMob, showBannerAd, watchRewardedAd } from "./admob";
 
 const COLORS = {
   pitchDark: "#0A1D14",
