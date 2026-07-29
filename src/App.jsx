@@ -467,17 +467,18 @@ export default function App() {
 
       {tab === "feed" ? (
         <div className="flex-1 overflow-y-auto px-5" onClick={markSeen}>
-          {tips.length === 0 ? (
-            <div className="flex flex-col items-center gap-2 py-16 text-center">
-              <span className="text-sm" style={{ color: COLORS.chalkDim }}>No tips published yet. Check back soon.</span>
-            </div
-          ) : (
-            <div className="flex flex-col gap-3 pb-2 pt-1">
-              {tips.map((t) => (
-                <TipCard key={t.id} tip={t} isNew={t.createdAt > lastSeen} unlocked={unlocked.has(t.id)} onUnlock={handleUnlock} />
-              ))}
-            </div>
-          )}
+                  {tips.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 py-16 text-center">
+            <span className="text-xs" style={{ color: COLORS.chalkDim }}>No tips published yet. Check back soon.</span>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3 pb-2 pt-1">
+            {tips.map((t) => (
+              <TipCard key={t.id} tip={t} isNew={t.createdAt > lastSeen} />
+            ))}
+          </div>
+        )}
+
           {tips.length > 0 && <AdSlot />}
         </div>
       ) : tab === "record" ? (
