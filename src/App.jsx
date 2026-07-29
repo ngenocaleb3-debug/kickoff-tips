@@ -463,34 +463,31 @@ function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
                   className="flex h-6 w-6 items-center justify-center rounded bg-rose-600/20 text-rose-400"
                 >
                   <XIcon size={12} />
-                </button>
-                <button
-                  onClick={() => onDelete(t.id)}
-                  className="flex h-6 w-6 items-center justify-center rounded bg-slate-800 text-slate-400 hover:text-rose-400"
-                >
-                  <Trash2 size={12} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+              </button>
+              <button
+                onClick={() => onDelete(t.id)}
+                className="flex h-6 w-6 items-center justify-center rounded bg-slate-800 text-slate-400 hover:text-rose-400"
+              >
+                <Trash2 size={12} />
+              </button>
+                        </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
   );
 }
 
-// -----------------------------------------------------------------------------
-// App shell
+
 
 // -----------------------------------------------------------------------------
 // App shell
 // -----------------------------------------------------------------------------
 export default function App() {
-
-
-
   const [tab, setTab] = useState("feed");
   const [tips, setTips] = useState([]);
+
   const [adminUser, setAdminUser] = useState(null);
   const [lastSeen, setLastSeen] = useState(() => Number(localStorage.getItem(LAST_SEEN_KEY) || 0));
   const [toast, setToast] = useState(null);
