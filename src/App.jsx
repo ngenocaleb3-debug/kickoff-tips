@@ -140,14 +140,13 @@ function TipCard({ tip, isNew }) {
 }
 
 function TrackRecord({ tips }) {
-  const settled = tips.filter((t) => t.result === "correct" || t.result === "wrong");
-  const hits = settled.filter((r) => r.result === "correct").length;
-  const accuracy = settled.length ? Math.round((hits / settled.length) * 100) : 0;
-  return (
-    <div className="flex flex-col gap-4 px-5 pb-6">
-      <div className="flex items-center justify-between rounded-2xl p-5" style={{ backgroundColor: COLORS.card, border: `1px solid ${COLORS.cardLine}` }}>
+  return null;
+}
+
 function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
   const [email, setEmail] = useState("");
+
+
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
