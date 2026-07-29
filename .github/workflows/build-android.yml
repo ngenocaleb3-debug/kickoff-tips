@@ -32,6 +32,16 @@ jobs:
       - name: Insert Firebase Android config
         run: cp google-services.json android/app/google-services.json
 
+      - name: Add Google Services Gradle plugin (project-level)
+        working-directory: android
+        run: |
+          sed -i '/dependencies {/a \        classpath("com.google.gms:google-services:4.4.2")' build.gradle
+
+      - name: Apply Google Services Gradle plugin (app-level)
+        working-directory: android
+        run: |
+          echo 'apply plugin: "com.google.gms.google-services"' >> app/build.gradle
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
