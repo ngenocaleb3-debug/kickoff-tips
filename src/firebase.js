@@ -17,14 +17,15 @@ import {
   orderBy 
 } from "firebase/firestore";
 
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyDqLcYw50m52gK6PFZ1LVIy7VuNUUKmFT8",
   authDomain: "kickoff-tips.firebaseapp.com",
   projectId: "kickoff-tips",
   storageBucket: "kickoff-tips.firebasestorage.app",
   messagingSenderId: "263942240393",
-  appId: "YOUR_APP_ID",
-  measurementId: "G-CTJBK8LD5Y"
+  appId: "1:263942240393:web:21b4a9c4c88d93aaf4ee58",
+  measurementId: "G-LWFB90RLDZ"
 };
 
 const app = initializeApp(firebaseConfig);
