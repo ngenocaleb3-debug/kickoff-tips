@@ -223,26 +223,26 @@ function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
     setForm(blank);
   }
 
-  if (!adminUser) {
+    if (!adminUser) {
     return (
-      <div className="mx-5 mb-3 flex flex-col gap-2 rounded-2xl p-4" style={{ backgroundColor: COLORS.card, border: `1px solid ${COLORS.cardLine}` }}>
+      <div className="mx-5 mb-3 flex flex-col gap-3 p-4 bg-slate-900 rounded-xl border border-slate-800">
         <div className="flex items-center gap-2">
-          <Lock size={14} style={{ color: COLORS.floodlight }} />
-          <span className="text-xs font-semibold" style={{ color: COLORS.chalk }}>Admin login</span>
+          <Lock size={14} style={{ color: "GOLD" }} />
+          <span className="text-xs font-semibold text-slate-200">Admin Login</span>
         </div>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"
-          className="rounded-lg px-3 py-2 text-xs outline-none" style={{ backgroundColor: COLORS.pitchDark, color: COLORS.chalk, border: `1px solid ${COLORS.cardLine}` }} />
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"
-          className="rounded-lg px-3 py-2 text-xs outline-none" style={{ backgroundColor: COLORS.pitchDark, color: COLORS.chalk, border: `1px solid ${loginError ? COLORS.loss : COLORS.cardLine}` }} />
-        {loginError && <span className="text-[10px]" style={{ color: COLORS.loss }}>{loginError}</span>}
-        <button onClick={handleLogin} disabled={loggingIn} className="rounded-lg py-2 text-xs font-bold" style={{ backgroundColor: COLORS.floodlight, color: COLORS.pitchDark, opacity: loggingIn ? 0.6 : 1 }}>
-          {loggingIn ? "Signing in…" : "Sign in"}
+        
+        {loginError && <span className="text-xs text-rose-400">{loginError}</span>}
+        
+        <button 
+          onClick={handleLogin} 
+          disabled={loggingIn}
+          className="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold rounded-lg text-sm transition-colors"
+        >
+          {loggingIn ? "Signing in..." : "Sign in with Google"}
         </button>
       </div>
     );
   }
-
-  const inputStyle = { backgroundColor: COLORS.pitchDark, color: COLORS.chalk, border: `1px solid ${COLORS.cardLine}` };
 
   return (
     <div className="mx-5 mb-3 flex flex-col gap-3 rounded-2xl p-4" style={{ backgroundColor: COLORS.card, border: `1px solid ${COLORS.cardLine}` }}>
