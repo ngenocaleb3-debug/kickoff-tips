@@ -47,7 +47,7 @@ export const watchAdminAuth = (callback) => {
 };
 
 // --- Tip Management Functions ---
-export const addTip = (tipData) => {
+export const publishTip = (tipData) => {
   return addDoc(collection(db, "tips"), {
     ...tipData,
     createdAt: new Date().toISOString()
@@ -62,7 +62,7 @@ export const settleTip = (tipId, status) => {
   return updateDoc(doc(db, "tips", tipId), { status });
 };
 
-export const subscribeToTips = (callback) => {
+export const subscribeTips = (callback) => {
   const q = query(collection(db, "tips"), orderBy("createdAt", "desc"));
   return onSnapshot(q, (snapshot) => {
     const tips = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
