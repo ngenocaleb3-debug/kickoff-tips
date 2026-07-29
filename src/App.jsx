@@ -444,23 +444,33 @@ function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
       </button>
 
       {tips.length > 0 && (
+              {tips.length > 0 && (
         <div className="mt-2 flex flex-col gap-2">
-          <span className="text-[10px] uppercase tracking-widest" style={{ color: COLORS.chalkDim }}>Your published tips</span>
+          <span className="text-[10px] uppercase font-semibold text-slate-400">
+            Manage Tips
+          </span>
           {tips.map((t) => (
-            <div key={t.id} className="flex items-center justify-between gap-2 rounded-lg px-3 py-2" style={{ backgroundColor: COLORS.pitchMid }}>
-              <span className="min-w-0 flex-1 truncate text-[11px]" style={{ color: COLORS.chalk }}>{t.home} vs {t.away} — {t.pick}</span>
-              <div className="flex shrink-0 items-center gap-1.5">
-                <button onClick={() => onSettle(t.id, t.result === "correct" ? null : "correct")}
-                  className="flex h-6 w-6 items-center justify-center rounded-full"
-                  style={{ backgroundColor: t.result === "correct" ? COLORS.win : COLORS.win + "22", border: `1px solid ${COLORS.win}` }} title="Mark correct">
-                  <Check size={12} style={{ color: t.result === "correct" ? COLORS.pitchDark : COLORS.win }} />
+            <div key={t.id} className="flex items-center justify-between bg-slate-900 border border-slate-800 p-2.5 rounded-lg">
+              <span className="min-w-0 flex-1 truncate text-xs text-white font-medium">{t.match}</span>
+              <div className="flex shrink-0 items-center gap-1.5 ml-2">
+                <button
+                  onClick={() => onSettle(t.id, "won")}
+                  className="flex h-6 w-6 items-center justify-center rounded bg-emerald-600/20 text-emerald-400"
+                >
+                  <Check size={12} />
                 </button>
-                <button onClick={() => onSettle(t.id, t.result === "wrong" ? null : "wrong")}
-                  className="flex h-6 w-6 items-center justify-center rounded-full"
-                  style={{ backgroundColor: t.result === "wrong" ? COLORS.loss : COLORS.loss + "22", border: `1px solid ${COLORS.loss}` }} title="Mark wrong">
-                  <XIcon size={12} style={{ color: t.result === "wrong" ? COLORS.pitchDark : COLORS.loss }} />
+                <button
+                  onClick={() => onSettle(t.id, "lost")}
+                  className="flex h-6 w-6 items-center justify-center rounded bg-rose-600/20 text-rose-400"
+                >
+                  <XIcon size={12} />
                 </button>
-                <button onClick={() => onDelete(t.id)}><Trash2 size={13} style={{ color: COLORS.chalkDim }} /></button>
+                <button
+                  onClick={() => onDelete(t.id)}
+                  className="flex h-6 w-6 items-center justify-center rounded bg-slate-800 text-slate-400 hover:text-rose-400"
+                >
+                  <Trash2 size={12} />
+                </button>
               </div>
             </div>
           ))}
@@ -470,10 +480,11 @@ function AdminPanel({ tips, adminUser, onPublish, onSettle, onDelete }) {
   );
 }
 
-// ---------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // App shell
-// ---------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 export default function App() {
+
   const [tab, setTab] = useState("feed");
   const [tips, setTips] = useState([]);
   const [adminUser, setAdminUser] = useState(null);
