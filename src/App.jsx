@@ -196,17 +196,18 @@ function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
   const blank = { league: "", home: "", away: "", kickoff: "", market: "1X2", pick: "Home Win", ftScore: "", confidence: 65, note: "" };
   const [form, setForm] = useState(blank);
 
-  async function handleLogin() {
+    async function handleLogin() {
     setLoginError("");
     setLoggingIn(true);
     try {
-      await adminLogin(email, password);
+      await adminLogin();
     } catch (e) {
-      setLoginError("Login failed. Check your email and password.");
+      setLoginError("Google sign-in failed. Please try again.");
     } finally {
       setLoggingIn(false);
     }
   }
+
 
   function update(field, value) {
     setForm((f) => {
