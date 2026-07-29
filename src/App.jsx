@@ -196,7 +196,6 @@ function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
   const blank = { league: "", home: "", away: "", kickoff: "", market: "1X2", pick: "Home Win", ftScore: "", confidence: 65, note: "" };
   const [form, setForm] = useState(blank);
 
-    async function handleLogin() {
       async function handleLogin() {
     setLoginError("");
     setLoggingIn(true);
@@ -208,6 +207,7 @@ function AdminPanel({ tips, adminUser, onPublish, onDelete, onSettle }) {
       setLoggingIn(false);
     }
   }
+
 
 
 
