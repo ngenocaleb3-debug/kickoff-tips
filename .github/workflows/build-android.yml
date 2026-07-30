@@ -42,6 +42,11 @@ jobs:
         run: |
           echo 'apply plugin: "com.google.gms.google-services"' >> app/build.gradle
 
+      - name: Add AdMob App ID to AndroidManifest
+        working-directory: android
+        run: |
+          sed -i 's#</application>#<meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3940256099942544~3347511713"/></application>#' app/src/main/AndroidManifest.xml
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -57,3 +62,4 @@ jobs:
         with:
           name: kickoff-tips-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          
