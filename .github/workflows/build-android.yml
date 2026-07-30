@@ -62,4 +62,37 @@ jobs:
         with:
           name: kickoff-tips-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Decode signing keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
+
+      - name: Add signing config to build.gradle
+        working-directory: android
+        run: |
+          sed -i '/^android {/a \
+              signingConfigs {\
+                  release {\
+                      storeFile file("release.keystore")\
+                      storePassword System.getenv("KEYSTORE_PASSWORD")\
+                      keyAlias System.getenv("KEY_ALIAS")\
+                      keyPassword System.getenv("KEY_PASSWORD")\
+                  }\
+              }' app/build.gradle
+          sed -i '/buildTypes {/,/release {/{/release {/a \
+                      signingConfig signingConfigs.release
+          }' app/build.gradle
+
+      - name: Build signed release AAB
+        working-directory: android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew bundleRelease
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: kickoff-tips-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
           
