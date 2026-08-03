@@ -26,6 +26,9 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Generate app icons
+        run: npx @capacitor/assets generate --android --iconBackgroundColor '#070C12' --iconBackgroundColorDark '#070C12'
+
       - name: Sync Capacitor
         run: npx cap sync android
 
@@ -95,4 +98,3 @@ jobs:
         with:
           name: kickoff-tips-release-aab
           path: android/app/build/outputs/bundle/release/app-release.aab
-          
